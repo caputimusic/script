@@ -1,0 +1,67 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2513
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 import streamlit as st\
+import random\
+import matplotlib.pyplot as plt\
+from matplotlib.animation import FuncAnimation\
+from datetime import datetime\
+\
+# Configuraci\'f3n inicial\
+num_digits = 10\
+data = \{'ceros': 0, 'unos': 0\}\
+porcentajes_ceros = []\
+tiempo_transcurrido = []\
+\
+# Funci\'f3n para generar un d\'edgito aleatorio (cero o uno)\
+def generar_digito():\
+    return random.choice([0, 1])\
+\
+# Funci\'f3n para actualizar la gr\'e1fica\
+def actualizar_grafica(frame):\
+    # Generar un nuevo d\'edgito y actualizar los datos\
+    digito = generar_digito()\
+    data['ceros'] += 1 if digito == 0 else 0\
+    data['unos'] += 1 if digito == 1 else 0\
+\
+    # Calcular el porcentaje de ceros y actualizar las listas\
+    porcentaje_ceros = (data['ceros'] / num_digits) * 100\
+    porcentajes_ceros.append(porcentaje_ceros)\
+\
+    # Obtener el tiempo transcurrido en segundos\
+    tiempo_actual = datetime.now()\
+    tiempo_transcurrido.append((tiempo_actual - tiempo_inicial).total_seconds())\
+\
+    # Actualizar la gr\'e1fica\
+    fig.clear()\
+    plt.plot(tiempo_transcurrido, porcentajes_ceros, label='Porcentaje de ceros')\
+    plt.xlabel('Tiempo (s)')\
+    plt.ylabel('Porcentaje (%)')\
+    plt.axhline(y=50, color='r', linestyle='--', label='50%')\
+    plt.legend()\
+\
+# Inicializar la figura y el eje\
+fig, ax = plt.subplots()\
+\
+# Inicializar el tiempo\
+tiempo_inicial = datetime.now()\
+\
+# Crear la animaci\'f3n\
+ani = FuncAnimation(fig, actualizar_grafica, interval=1000)\
+\
+# Configurar la aplicaci\'f3n de Streamlit\
+st.title('Gr\'e1fica de Porcentaje de Ceros')\
+st.pyplot(fig)\
+\
+# Ejecutar la aplicaci\'f3n de Streamlit\
+st.write("La gr\'e1fica se actualiza cada segundo.")\
+st.write("Abre esta URL en tu navegador m\'f3vil para ver la gr\'e1fica en tiempo real:")\
+st.write("http://localhost:8501")\
+st.write("Presiona Ctrl + C en la terminal para detener la ejecuci\'f3n.")\
+st.run_server(port=8501)\
+x
+
